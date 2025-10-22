@@ -23,27 +23,59 @@ A Model Context Protocol (MCP) server for Hyperliquid perpetual trading using th
 ### Using uvx (Recommended)
 
 ```bash
-# Install and run directly
-uvx hyperliquid-mcp
+# Install and run directly from PyPI
+uvx mcp-hyperliquid
 ```
 
-### Using uv
+### Using pip
 
 ```bash
-# Clone and install
+# Install with pip
+pip install mcp-hyperliquid
+
+# Run
+mcp-hyperliquid
+```
+
+### Local Development
+
+```bash
+# Clone and install from source
+git clone https://github.com/edkdev/hyperliquid-mcp.git
 cd hyperliquid-mcp
 uv sync
 
-# Run
-uv run hyperliquid-mcp
+# Run locally
+uv run python -m hyperliquid_mcp.server
 ```
 
-### Traditional pip
+#### Local Development Configuration
 
-```bash
-pip install hyperliquid-mcp
-hyperliquid-mcp
+If you're running from source code locally, use this configuration:
+
+```json
+{
+  "mcpServers": {
+    "hyperliquid": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/path/to/hyperliquid-mcp",
+        "run",
+        "python",
+        "-m",
+        "hyperliquid_mcp.server"
+      ],
+      "env": {
+        "HYPERLIQUID_PRIVATE_KEY": "0x1234567890abcdef...",
+        "HYPERLIQUID_TESTNET": "false"
+      }
+    }
+  }
+}
 ```
+
+Replace `/path/to/hyperliquid-mcp` with the actual path to your cloned repository.
 
 ## Configuration
 
@@ -74,7 +106,7 @@ Add to your `mcp.json` configuration file:
   "mcpServers": {
     "hyperliquid": {
       "command": "uvx",
-      "args": ["hyperliquid-mcp"],
+      "args": ["mcp-hyperliquid"],
       "env": {
         "HYPERLIQUID_PRIVATE_KEY": "0x1234567890abcdef...",
         "HYPERLIQUID_TESTNET": "false"
@@ -99,7 +131,7 @@ Add to your `mcp.json` configuration file:
   "mcpServers": {
     "hyperliquid": {
       "command": "uvx",
-      "args": ["hyperliquid-mcp"],
+      "args": ["mcp-hyperliquid"],
       "env": {
         "HYPERLIQUID_PRIVATE_KEY": "0x1234567890abcdef...",
         "HYPERLIQUID_ACCOUNT_ADDRESS": "0xYourTradingAccountAddress...",
@@ -115,7 +147,7 @@ Add to your `mcp.json` configuration file:
 
 Configure according to your client's documentation, using:
 - **Command:** `uvx` or `python`
-- **Args:** `["hyperliquid-mcp"]` or `["-m", "hyperliquid_mcp.server"]`
+- **Args:** `["mcp-hyperliquid"]` or `["-m", "hyperliquid_mcp.server"]`
 - **Environment:** Add the required environment variables in your client's env configuration
 
 ## Available Tools
@@ -343,7 +375,7 @@ uv sync
 cat .env
 
 # Run with debug logging
-HYPERLIQUID_LOG_LEVEL=DEBUG uvx hyperliquid-mcp
+HYPERLIQUID_LOG_LEVEL=DEBUG uvx mcp-hyperliquid
 ```
 
 ### Orders not placing
@@ -367,7 +399,7 @@ The AI will show you the complete list of tradeable assets with their indices.
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone https://github.com/edkdev/hyperliquid-mcp.git
 cd hyperliquid-mcp
 
 # Install dependencies
@@ -393,19 +425,7 @@ hyperliquid-mcp/
 └── .env.example              # Environment template
 ```
 
-## Comparison with JavaScript Implementation
 
-This Python implementation fixes several critical issues in the existing JavaScript MCP:
-
-| Feature | JavaScript MCP | Python MCP |
-|---------|---------------|------------|
-| Signing | ❌ Incorrect signatureChainId | ✅ Correct (official SDK) |
-| L1 Actions | ⚠️ Mostly works | ✅ Fully working |
-| User-signed Actions | ❌ Broken | ✅ Working |
-| Agent Mode | ❌ Not supported | ✅ Supported |
-| Error Messages | ⚠️ Generic | ✅ Detailed |
-| Wallet Check | ❌ None | ✅ Verified on startup |
-| TWAP Orders | ❌ Not implemented | ⚠️ Coming soon |
 
 ## Contributing
 

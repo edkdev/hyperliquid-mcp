@@ -1,11 +1,24 @@
 [project]
-name = "hyperliquid-mcp"
+name = "mcp-hyperliquid"
 version = "0.1.0"
 description = "Model Context Protocol server for Hyperliquid trading using the official Python SDK"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
-    { name = "Hyperliquid MCP", email = "dev@example.com" }
+    { name = "Ed", email = "edkdev@proton.me" }
+]
+license = { text = "MIT" }
+keywords = ["mcp", "hyperliquid", "trading", "model-context-protocol", "ai", "assistant"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial :: Investment",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
     "hyperliquid-python-sdk>=0.6.0",
@@ -25,6 +38,17 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/hyperliquid_mcp"]
+
+[dependency-groups]
+dev = [
+    "twine>=6.2.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/edkdev/hyperliquid-mcp"
+Repository = "https://github.com/edkdev/hyperliquid-mcp"
+Issues = "https://github.com/edkdev/hyperliquid-mcp/issues"
+Documentation = "https://github.com/edkdev/hyperliquid-mcp#readme"
 
 [project.scripts]
 hyperliquid-mcp = "hyperliquid_mcp.server:main"
