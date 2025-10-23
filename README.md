@@ -10,7 +10,7 @@ A Model Context Protocol (MCP) server for Hyperliquid perpetual trading using th
 ✅ **Bracket Orders** - Atomic entry + TP + SL order placement  
 ✅ **Market Data** - Real-time prices, order books, funding rates, candles  
 ✅ **Account Management** - Positions, balances, fills, funding history  
-✅ **Testnet Support** - Test strategies safely before going live  
+✅ **Testnet Support** - Test strategies safely before going live
 
 ## Prerequisites
 
@@ -24,7 +24,7 @@ A Model Context Protocol (MCP) server for Hyperliquid perpetual trading using th
 
 ```bash
 # Install and run directly from PyPI
-uvx mcp-hyperliquid
+uvx --from mcp-hyperliquid hyperliquid-mcp
 ```
 
 ### Using pip
@@ -84,11 +84,13 @@ Replace `/path/to/hyperliquid-mcp` with the actual path to your cloned repositor
 **IMPORTANT:** Your wallet must be registered on Hyperliquid before trading.
 
 **Mainnet:**
+
 1. Go to https://app.hyperliquid.xyz
 2. Connect your wallet
 3. Deposit funds from Arbitrum One (any amount registers your wallet)
 
 **Testnet:**
+
 1. Go to https://app.hyperliquid-testnet.xyz
 2. Connect your wallet
 3. Get testnet funds from the faucet or bridge
@@ -106,7 +108,7 @@ Add to your `mcp.json` configuration file:
   "mcpServers": {
     "hyperliquid": {
       "command": "uvx",
-      "args": ["mcp-hyperliquid"],
+      "args": ["--from", "mcp-hyperliquid", "hyperliquid-mcp"],
       "env": {
         "HYPERLIQUID_PRIVATE_KEY": "0x1234567890abcdef...",
         "HYPERLIQUID_TESTNET": "false"
@@ -117,9 +119,11 @@ Add to your `mcp.json` configuration file:
 ```
 
 **Required Environment Variables:**
+
 - `HYPERLIQUID_PRIVATE_KEY` - Your wallet's private key for signing transactions
 
 **Optional Environment Variables:**
+
 - `HYPERLIQUID_ACCOUNT_ADDRESS` - For agent/API wallet mode (advanced)
 - `HYPERLIQUID_TESTNET` - Set to "true" for testnet, "false" or omit for mainnet
 - `HYPERLIQUID_VAULT_ADDRESS` - For vault trading
@@ -131,7 +135,7 @@ Add to your `mcp.json` configuration file:
   "mcpServers": {
     "hyperliquid": {
       "command": "uvx",
-      "args": ["mcp-hyperliquid"],
+      "args": ["--from", "mcp-hyperliquid", "hyperliquid-mcp"],
       "env": {
         "HYPERLIQUID_PRIVATE_KEY": "0x1234567890abcdef...",
         "HYPERLIQUID_ACCOUNT_ADDRESS": "0xYourTradingAccountAddress...",
@@ -146,8 +150,9 @@ Add to your `mcp.json` configuration file:
 #### Other MCP Clients
 
 Configure according to your client's documentation, using:
+
 - **Command:** `uvx` or `python`
-- **Args:** `["mcp-hyperliquid"]` or `["-m", "hyperliquid_mcp.server"]`
+- **Args:** `["--from", "mcp-hyperliquid", "hyperliquid-mcp"]` or `["-m", "hyperliquid_mcp.server"]`
 - **Environment:** Add the required environment variables in your client's env configuration
 
 ## Available Tools
@@ -202,6 +207,7 @@ Show me my Hyperliquid account balance
 ```
 
 The AI will call `hyperliquid_get_balance` and show you:
+
 - Account value
 - Margin used
 - Withdrawable amount
@@ -214,6 +220,7 @@ What's the current price of SOL on Hyperliquid? Show me the order book too.
 ```
 
 The AI will:
+
 1. Call `hyperliquid_get_meta` to find SOL's index
 2. Call `hyperliquid_get_all_mids` for current price
 3. Call `hyperliquid_get_order_book` for depth
@@ -231,6 +238,7 @@ Place a bracket order on Hyperliquid:
 ```
 
 The AI will:
+
 1. Call `hyperliquid_get_meta` to get SOL's asset index (5)
 2. Call `hyperliquid_place_bracket_order` with:
    - asset: 5
@@ -241,6 +249,7 @@ The AI will:
    - stopLossPrice: "216.80"
 
 This places 3 orders atomically:
+
 - Entry order at $218.00
 - Take profit trigger at $219.50 (reduce-only)
 - Stop loss trigger at $216.80 (reduce-only)
@@ -252,6 +261,7 @@ Show me my open positions. If I have a SOL position, close it at market price.
 ```
 
 The AI will:
+
 1. Call `hyperliquid_get_positions`
 2. If SOL position exists, call `hyperliquid_place_order` with:
    - Opposite side (sell if long, buy if short)
@@ -265,6 +275,7 @@ Show me my last 50 trades from the past 24 hours
 ```
 
 The AI will:
+
 1. Calculate timestamps (now - 24h to now)
 2. Call `hyperliquid_get_user_fills` with time range
 3. Format and display the results
@@ -274,25 +285,28 @@ The AI will:
 Use `hyperliquid_get_meta` to get the full list. Common assets:
 
 | Index | Asset | Index | Asset | Index | Asset |
-|-------|-------|-------|-------|-------|-------|
-| 0 | BTC | 1 | ETH | 5 | SOL |
-| 10 | LTC | 11 | ARB | 14 | SUI |
-| 18 | LINK | 25 | XRP | 27 | APT |
+| ----- | ----- | ----- | ----- | ----- | ----- |
+| 0     | BTC   | 1     | ETH   | 5     | SOL   |
+| 10    | LTC   | 11    | ARB   | 14    | SUI   |
+| 18    | LINK  | 25    | XRP   | 27    | APT   |
 
 ## Order Types
 
 ### Limit Order (Good-Till-Cancel)
+
 ```python
 order_type = {"limit": {"tif": "Gtc"}}
 ```
 
 ### Market Order (Immediate or Cancel)
+
 ```python
 price = "0"  # Setting price to 0 makes it a market order
 order_type = {"limit": {"tif": "Ioc"}}
 ```
 
 ### Trigger Order (Stop Loss / Take Profit)
+
 ```python
 order_type = {
     "trigger": {
@@ -310,6 +324,7 @@ order_type = {
 **Problem:** Your wallet isn't registered on Hyperliquid.
 
 **Solution:**
+
 1. Go to app.hyperliquid.xyz (or testnet URL)
 2. Connect your wallet
 3. Deposit any amount from Arbitrum
@@ -322,6 +337,7 @@ order_type = {
 **Solution:** Ensure `size * price >= $10`
 
 Example:
+
 - SOL at $200: Need at least 0.05 SOL
 - BTC at $50,000: Need at least 0.0002 BTC
 
@@ -330,6 +346,7 @@ Example:
 **Problem:** Private key mismatch or signing error.
 
 **Solution:**
+
 1. Check your HYPERLIQUID_PRIVATE_KEY is correct
 2. Ensure it matches the wallet address you registered
 3. If using agent mode, verify HYPERLIQUID_ACCOUNT_ADDRESS
@@ -341,12 +358,14 @@ Agent mode allows an API wallet to sign transactions for a different trading acc
 **Use case:** Keep your main account safe while allowing an API wallet to trade.
 
 **Setup:**
+
 ```bash
 HYPERLIQUID_PRIVATE_KEY=0xApiWalletPrivateKey...
 HYPERLIQUID_ACCOUNT_ADDRESS=0xMainTradingAccountAddress...
 ```
 
 **Requirements:**
+
 1. Both wallets must be registered on Hyperliquid
 2. Main account must approve the API wallet as an agent
 3. Use `approve_agent` action through Hyperliquid UI first
@@ -375,7 +394,7 @@ uv sync
 cat .env
 
 # Run with debug logging
-HYPERLIQUID_LOG_LEVEL=DEBUG uvx mcp-hyperliquid
+HYPERLIQUID_LOG_LEVEL=DEBUG uvx --from mcp-hyperliquid hyperliquid-mcp
 ```
 
 ### Orders not placing
@@ -424,8 +443,6 @@ hyperliquid-mcp/
 ├── README.md                  # This file
 └── .env.example              # Environment template
 ```
-
-
 
 ## Contributing
 
