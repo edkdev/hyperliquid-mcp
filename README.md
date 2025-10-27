@@ -444,6 +444,10 @@ hyperliquid-mcp/
 └── .env.example              # Environment template
 ```
 
+### **Join Our Community**
+
+- **[Telegram Group](https://t.me/+fC8GWO3zBe04NTY0)** - Get help, share strategies, and connect with other traders
+
 ## Contributing
 
 Contributions are welcome! Please:
